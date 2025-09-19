@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Serviços</string>
+    <string name="informacoes">Informações</string>
+    <string name="buscar">Buscar</string>
+    <string name="digite_o_cep">Digite o cep para buscar o endereço</string>
+    <string name="selecione_o_servi_o_que_deseja_utilizar">Selecione o serviço que deseja utilizar</string>
+    <string name="consultar_cep">Consultar CEP</string>
+    <string name="consultar_cnpj">Consultar CNPJ</string>
+</resources>
