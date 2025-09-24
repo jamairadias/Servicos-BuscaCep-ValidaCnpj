@@ -1,5 +1,7 @@
 package com.example.servicos;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -13,7 +15,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,28 +28,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return insets;
         });
 
-        Button btnAbrirCep = findViewById(R.id.btnAbrirCep);
-        btnAbrirCep.setOnClickListener(this);
+        Button btTela1 = findViewById(R.id.buttonTela1);
+        btTela1.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, CepActivity.class);
+            startActivity(intent);
+        });
 
-        Button btnAbrirCnpj = findViewById(R.id.btnAbrirCnpj);
-        btnAbrirCnpj.setOnClickListener(this);
-
-    }
-
-    @Override
-    public void onClick(View view) {
-        if (view.getId() == R.id.btnAbrirCep) {
-            Intent telaBuscaCep = new Intent(MainActivity.this, CepActivity.class);
-            startActivity(telaBuscaCep);
-
-        } else if (view.getId() == R.id.btnAbrirCnpj) {
-            Intent telaBuscaCnpj = new Intent(MainActivity.this, CnpjActivity.class);
-            startActivity(telaBuscaCnpj);
-
-        }
-
-
-
-
+        Button btTela2 = findViewById(R.id.buttonTela2);
+        btTela2.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, CnpjActivity.class);
+            startActivity(intent);
+        });
     }
 }

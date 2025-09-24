@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
-
     <LinearLayout
         android:layout_width="310dp"
         android:layout_height="613dp"
@@ -29,7 +28,7 @@
             android:textSize="20sp" />
 
         <Button
-            android:id="@+id/btnAbrirCep"
+            android:id="@+id/buttonTela1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -39,7 +38,7 @@
             android:textSize="20sp" />
 
         <Button
-            android:id="@+id/btnAbrirCnpj"
+            android:id="@+id/buttonTela2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"

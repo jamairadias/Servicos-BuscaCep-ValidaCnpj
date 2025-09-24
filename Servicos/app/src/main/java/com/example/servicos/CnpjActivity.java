@@ -1,6 +1,5 @@
 package com.example.servicos;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -15,7 +14,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.servicos.api.InvertextoApi;
-import com.example.servicos.model.Logradouro;
+import com.example.servicos.model.Cnpj;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,12 +22,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class CnpjActivity extends AppCompatActivity implements View.OnClickListener {
+public class CnpjActivity extends AppCompatActivity {
 
-    private String buscaCnpj = "";
-
-    private ProgressDialog progressDialog;
-    private EditText etCnpj;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,32 +36,19 @@ public class CnpjActivity extends AppCompatActivity implements View.OnClickListe
             return insets;
         });
 
-        etCnpj = findViewById(R.id.etCnpj);
+        EditText etCnpj = findViewById(R.id.etCnpj);
         Button btBuscarCnpj = findViewById(R.id.btBuscarCnpj);
-
-        btBuscarCnpj.setOnClickListener(this);
-
-        String titulo = getIntent().getStringExtra("buscaCnpj");
-        buscaCnpj = titulo;
+        TextView tvInfoCnpj = findViewById(R.id.tvInfoCnpj);
+        btBuscarCnpj.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tvInfoCnpj.setText("Carregando...");
+                String numeroCnpj = etCnpj.getText().toString();
+                consultarCnpj(numeroCnpj);
+            }
+        });
     }
-
-
-    @Override
-    public void onClick(View view) {
-        if (view.getId() == R.id.btBuscarCnpj) {
-            String numeroCnpj = etCnpj.getText().toString();
-
-            progressDialog = new ProgressDialog(CnpjActivity.this);
-            progressDialog.setMessage("Carregando...");
-            progressDialog.setCancelable(false);
-            progressDialog.show();
-
-            consultarCnpj(numeroCnpj);
-        }
-    }
-
     private void consultarCnpj(String numeroCnpj) {
-        TextView tvInfo = findViewById(R.id.tvInfoCnpj);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Constantes.URL)
@@ -75,40 +57,27 @@ public class CnpjActivity extends AppCompatActivity implements View.OnClickListe
 
         InvertextoApi invertextoApi = retrofit.create(InvertextoApi.class);
 
-        Call<Logradouro> call = invertextoApi.getLogradouro(
-                numeroCnpj, Constantes.TOKEN
-        );
+        Call<Cnpj> call = invertextoApi.getCnpj(numeroCnpj, Constantes.TOKEN);
 
-        call.enqueue(new Callback<Logradouro>() {
+        call.enqueue(new Callback<Cnpj>() {
             @Override
-            public void onResponse(Call<Logradouro> call, Response<Logradouro> response) {
-                if (progressDialog != null && progressDialog.isShowing()) {
-                    progressDialog.dismiss();
-                }
+            public void onResponse(Call<Cnpj> call, Response<Cnpj> response) {
+                if (response.isSuccessful() ) {
+                    Cnpj cnpj = response.body();
 
-                if (response.isSuccessful() && response.body() != null) {
-                    Logradouro logradouro = response.body();
-                    tvInfo.setText(logradouro.formatar());
                 } else {
-                    Toast.makeText(
-                            CnpjActivity.this,
-                            "Erro ao buscar informações, verifique o CNPJ",
+                    Toast.makeText(CnpjActivity.this, "Erro ao buscar informações, verifique o CNPJ",
                             Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<Logradouro> call, Throwable throwable) {
-                if (progressDialog != null && progressDialog.isShowing()) {
-                    progressDialog.dismiss();
-                }
+            public void onFailure(Call<Cnpj> call, Throwable throwable) {
 
-                Toast.makeText(
-                        CnpjActivity.this,
-                        "Verifique a sua conexão com a internet",
+                Toast.makeText(CnpjActivity.this, "Falha na comunicação. Verifique sua conexão com a internet.",
                         Toast.LENGTH_LONG).show();
+
             }
         });
     }
 }
-    
