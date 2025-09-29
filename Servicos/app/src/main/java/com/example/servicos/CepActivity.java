@@ -39,7 +39,6 @@ public class CepActivity extends AppCompatActivity {
             return insets;
         });
 
-        // Initialize UI elements
         etCep = findViewById(R.id.etCep);
         btBuscar = findViewById(R.id.btBuscar);
         tvInfo = findViewById(R.id.tvInfo);
@@ -47,12 +46,11 @@ public class CepActivity extends AppCompatActivity {
         btBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String numeroCep = etCep.getText().toString().trim(); // Adicionado trim() para remover espaços
+                String numeroCep = etCep.getText().toString().trim();
                 if (numeroCep.isEmpty()) {
                     Toast.makeText(CepActivity.this, "Por favor, insira um CEP.", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                // Mostrar "Carregando..." e desabilitar o botão para evitar cliques múltiplos
                 tvInfo.setText("Carregando...");
                 btBuscar.setEnabled(false);
                 consultarCep(numeroCep);
@@ -62,19 +60,17 @@ public class CepActivity extends AppCompatActivity {
 
     private void consultarCep(String numeroCep) {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Constantes.URL) // Certifique-se que Constantes.URL está definida corretamente
+                .baseUrl(Constantes.URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         InvertextoApi invertextoApi = retrofit.create(InvertextoApi.class);
 
-        // Certifique-se que Constantes.TOKEN está definida corretamente
         Call<Logradouro> call = invertextoApi.getLogradouro(numeroCep, Constantes.TOKEN);
 
         call.enqueue(new Callback<Logradouro>() {
             @Override
             public void onResponse(Call<Logradouro> call, Response<Logradouro> response) {
-                // Reabilitar o botão
                 btBuscar.setEnabled(true);
 
                 if (response.isSuccessful() && response.body() != null) {
@@ -85,15 +81,14 @@ public class CepActivity extends AppCompatActivity {
                     infoBuilder.append("Logradouro: ").append(logradouro.getStreet()).append("\n");
                     infoBuilder.append("Bairro: ").append(logradouro.getNeighborhood()).append("\n");
 
-
                     tvInfo.setText(infoBuilder.toString());
 
                 } else {
-                    tvInfo.setText(""); // Limpar o texto de carregando
+                    tvInfo.setText("");
                     String errorMessage = "Erro ao buscar informações.";
-                    if (response.code() == 400) { // Exemplo de tratamento de erro específico
+                    if (response.code() == 400) {
                         errorMessage = "CEP inválido ou não encontrado.";
-                    } else if (response.code() == 401) { // Exemplo
+                    } else if (response.code() == 401) {
                         errorMessage = "Token inválido ou não autorizado.";
                     }
                     Toast.makeText(CepActivity.this, errorMessage + " (Código: " + response.code() + ")",
@@ -103,9 +98,8 @@ public class CepActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Logradouro> call, Throwable throwable) {
-                // Reabilitar o botão
                 btBuscar.setEnabled(true);
-                tvInfo.setText(""); // Limpar o texto de carregando
+                tvInfo.setText("");
                 Toast.makeText(CepActivity.this, "Falha na comunicação: " + throwable.getMessage(),
                         Toast.LENGTH_LONG).show();
             }
