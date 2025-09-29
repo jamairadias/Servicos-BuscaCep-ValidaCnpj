@@ -1,6 +1,9 @@
 package com.example.servicos;
 
-public class Constantes {
-    public static String URL = "https://api.invertexto.com/";
-    public static String TOKEN = "21884|HzCn9ESybMlY6edQkFQ8MkC1PDkYd0kY";
+public final class Constantes {
+    private Constantes() {}
+
+    public static final String URL = BuildConfig.BASE_URL;
+    public static final String TOKEN = BuildConfig.TOKEN;
+    public static final String TOKEN_CNPJ = BuildConfig.TOKEN_CNPJ;
 }

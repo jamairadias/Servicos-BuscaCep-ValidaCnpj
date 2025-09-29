@@ -79,8 +79,7 @@ public class CepActivity extends AppCompatActivity {
 
                 if (response.isSuccessful() && response.body() != null) {
                     Logradouro logradouro = response.body();
-                    // Construa a string com as informações do logradouro
-                    // Adapte de acordo com os campos disponíveis no seu objeto Logradouro
+
                     StringBuilder infoBuilder = new StringBuilder();
                     infoBuilder.append("CEP: ").append(logradouro.getCep()).append("\n");
                     infoBuilder.append("Logradouro: ").append(logradouro.getStreet()).append("\n");

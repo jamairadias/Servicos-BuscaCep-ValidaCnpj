@@ -16,9 +16,9 @@ public interface InvertextoApi {
             @Query("token") String token
     );
 
-    @GET("/v1/cnpj/{numerocnpj}")
+    @GET("/v1/cnpj/{numero}")
     Call<Cnpj> getCnpj(
-            @Path("numerocnpj") String numerocnpj,
+            @Path("numero") String numero,
             @Query("token") String token
     );
 }
